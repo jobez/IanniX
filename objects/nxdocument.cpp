@@ -20,7 +20,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+#include <QDebug>
 #include "nxdocument.h"
 
 NxDocument::NxDocument(ApplicationCurrent *parent, UiFileItem *_fileItem) :
@@ -119,6 +119,7 @@ void NxDocument::open() {
         NxObjectDispatchProperty::source = ExecuteSourceGui;
         source = NxObjectDispatchProperty::source;
         initialContent = Application::current->serialize();
+        qDebug() << initialContent;
     }
 }
 void NxDocument::open(bool configure) {
@@ -250,14 +251,29 @@ const QString NxDocument::getContent(bool fromFile) {
     else
         scoreContent = Transport::editor->getContent();
 
+
+    qDebug() << scoreContent;
+
+
     //Locate functions
     NxObjectDispatchProperty::source = ExecuteSourceGui;
     remplaceInFunction(&scoreContent, "//GUI: NEVER EVER REMOVE THIS LINE\n", Application::current->serialize());
-    NxObjectDispatchProperty::source = ExecuteSourceNetwork;
-    remplaceInFunction(&scoreContent, "//INTERFACES: NEVER EVER REMOVE THIS LINE\n", Application::current->serialize());
-    remplaceInFunction(&scoreContent, " *\t//APP VERSION: NEVER EVER REMOVE THIS LINE\n", QString(" *\tMade with IanniX %1").arg(QCoreApplication::applicationVersion()));
 
-    return scoreContent;
+    qDebug() << Application::current->serialize();
+    qDebug() << scoreContent;
+
+    // NxObjectDispatchProperty::source = ExecuteSourceNetwork;
+    // remplaceInFunction(&scoreContent, "//INTERFACES: NEVER EVER REMOVE THIS LINE\n", Application::current->serialize());
+
+    qDebug() << Application::current->serialize();
+    qDebug() << scoreContent;
+
+    // remplaceInFunction(&scoreContent, " *\t//APP VERSION: NEVER EVER REMOVE THIS LINE\n", QString(" *\tMade with IanniX %1").arg(QCoreApplication::applicationVersion()));
+
+    // qDebug() << Application::current->serialize();
+    // qDebug() << scoreContent;
+
+    return Application::current->serialize();
 }
 
 void NxDocument::remplaceInFunction(QString *content, const QString &delimiter, const QString &data) {
