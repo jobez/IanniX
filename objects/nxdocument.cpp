@@ -251,29 +251,16 @@ const QString NxDocument::getContent(bool fromFile) {
     else
         scoreContent = Transport::editor->getContent();
 
-
-    qDebug() << scoreContent;
-
-
     //Locate functions
     NxObjectDispatchProperty::source = ExecuteSourceGui;
     remplaceInFunction(&scoreContent, "//GUI: NEVER EVER REMOVE THIS LINE\n", Application::current->serialize());
 
-    qDebug() << Application::current->serialize();
-    qDebug() << scoreContent;
+    NxObjectDispatchProperty::source = ExecuteSourceNetwork;
+    remplaceInFunction(&scoreContent, "//INTERFACES: NEVER EVER REMOVE THIS LINE\n", Application::current->serialize());
 
-    // NxObjectDispatchProperty::source = ExecuteSourceNetwork;
-    // remplaceInFunction(&scoreContent, "//INTERFACES: NEVER EVER REMOVE THIS LINE\n", Application::current->serialize());
+    remplaceInFunction(&scoreContent, " *\t//APP VERSION: NEVER EVER REMOVE THIS LINE\n", QString(" *\tMade with IanniX %1").arg(QCoreApplication::applicationVersion()));
 
-    qDebug() << Application::current->serialize();
-    qDebug() << scoreContent;
-
-    // remplaceInFunction(&scoreContent, " *\t//APP VERSION: NEVER EVER REMOVE THIS LINE\n", QString(" *\tMade with IanniX %1").arg(QCoreApplication::applicationVersion()));
-
-    // qDebug() << Application::current->serialize();
-    // qDebug() << scoreContent;
-
-    return Application::current->serialize();
+    return scoreContent;
 }
 
 void NxDocument::remplaceInFunction(QString *content, const QString &delimiter, const QString &data) {

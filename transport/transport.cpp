@@ -45,7 +45,8 @@ Transport::Transport(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Transport) {
     ui->setupUi(this);
-    new TransportCpu(this);
+    // qthread + ecl is causing a segfault ?
+    // new TransportCpu(this);
     speedLock = false;
     toolbarButton = 0;
 
@@ -259,4 +260,3 @@ void Transport::dispatchProperty(const char *_property, const QVariant & value) 
     propertyChanged(_property);
     setProperty(_property, value);
 }
-

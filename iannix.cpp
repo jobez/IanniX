@@ -20,8 +20,27 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+#include "ecl/cl_bridge_utils.hpp"
 #include "iannix.h"
+
+void init_cl_env(){
+  char* argv;
+  char** pargv;
+  argv = "app";
+  pargv = &argv;
+
+
+  /* Initialize CL environment */
+  cl_boot(1, pargv);
+  cl_eval("princ", ":korea");
+  // ecl_init_module(NULL, __cl_init_name);
+  // /* load fasb */
+  // cl_eval("load", CL_MAIN_FASB);
+  // /* set context to current package */
+  // cl_eval("in-package", CL_MAIN_PACKAGE_NAME);
+  /* hook for shutting down cl env */
+  atexit(cl_shutdown);
+}
 
 IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
     ApplicationCurrent(parent) {
@@ -232,7 +251,7 @@ IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
 
     //Show
     view->show();
-
+    init_cl_env();
     if(Application::current)
         Application::current->readyToStart();
 }

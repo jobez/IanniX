@@ -76,6 +76,9 @@ unix:!mac {
     INSTALLS      += icons
 }
 
+HEADERS += ecl/cl_bridge_utils.hpp
+SOURCES += ecl/cl_bridge_utils.cpp
+
 HEADERS  += iannix.h   iannixapp.h   iannix_spec.h  iannix_cmd.h
 SOURCES  += iannix.cpp iannixapp.cpp iannix_spec.cpp
 HEADERS  += misc/help.h   misc/application.h   misc/options.h   misc/applicationexecute.h
@@ -224,13 +227,20 @@ unix {
     }
 }
 linux* {
-    DEFINES                  += __LINUX_ALSA__
-    DEFINES                  += AVOID_TIMESTAMPING
-    DEFINES                  += __linux__
-    LIBS                     += -lasound
-    PKGCONFIG                += alsa
-    !qesp_linux_udev:DEFINES += QESP_NO_UDEV
-    qesp_linux_udev: LIBS    += -ludev
+QMAKE_CFLAGS += `ecl-config --cflags`
+
+QMAKE_CXXFLAGS +=  `ecl-config --cflags`
+# The ECL shared library directory.
+QMAKE_LFLAGS += `ecl-config --ldflags`
+
+
+DEFINES                  += __LINUX_ALSA__
+DEFINES                  += AVOID_TIMESTAMPING
+DEFINES                  += __linux__
+LIBS                     += -lasound -lecl
+PKGCONFIG                += alsa ecl
+!qesp_linux_udev:DEFINES += QESP_NO_UDEV
+qesp_linux_udev: LIBS    += -ludev
 }
 macx {
     DEFINES             += __MACOSX_CORE__
