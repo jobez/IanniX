@@ -231,13 +231,13 @@ QMAKE_CFLAGS += `ecl-config --cflags`
 
 QMAKE_CXXFLAGS +=  `ecl-config --cflags`
 # The ECL shared library directory.
-QMAKE_LFLAGS += `ecl-config --ldflags`
+QMAKE_LFLAGS += `ecl-config --ldflags` -L.
 
 
 DEFINES                  += __LINUX_ALSA__
 DEFINES                  += AVOID_TIMESTAMPING
 DEFINES                  += __linux__
-LIBS                     += -lasound -lecl
+LIBS                     += -lasound -lecl -lmy_app_lib
 PKGCONFIG                += alsa ecl
 !qesp_linux_udev:DEFINES += QESP_NO_UDEV
 qesp_linux_udev: LIBS    += -ludev

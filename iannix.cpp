@@ -23,6 +23,33 @@
 #include "ecl/cl_bridge_utils.hpp"
 #include "iannix.h"
 
+/* Initialization.
+ * This time we load the fasb file after
+ * the Lisp Environment is booted.
+ * */
+#define __cl_init_name  init_lib_MY_APP__ALL_SYSTEMS
+
+extern "C"{
+
+  extern void __cl_init_name(cl_object);
+
+}
+
+
+cl_object iannix_run(cl_obj cmd_string){
+  QString cmd = QString::fromStdString(cmd_string.to_std_string());
+
+  qDebug() << cmd;
+  QVariant qresult = Application::current->execute(cmd,
+                                                 ExecuteSourceGui);
+
+  qDebug() << qresult;
+  string result = qresult.toString().toStdString();
+
+  return ecl_make_constant_base_string(result.c_str(), strlen(result.c_str()));
+}
+
+
 void init_cl_env(){
   char* argv;
   char** pargv;
@@ -32,14 +59,14 @@ void init_cl_env(){
 
   /* Initialize CL environment */
   cl_boot(1, pargv);
-  cl_eval("princ", ":korea");
-  // ecl_init_module(NULL, __cl_init_name);
+  cl_eval("load",  "\"lisp/my.lisp\"");
   // /* load fasb */
   // cl_eval("load", CL_MAIN_FASB);
   // /* set context to current package */
   // cl_eval("in-package", CL_MAIN_PACKAGE_NAME);
   /* hook for shutting down cl env */
   atexit(cl_shutdown);
+  DEFUN("iannix-run", iannix_run, 1);
 }
 
 IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :

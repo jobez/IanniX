@@ -17,6 +17,9 @@ using std::endl;
 cl_object lispfy(string str); /* convert a std::string to cl_object */
 
 
+#define DEFUN(name, c_name, num_args)                                   \
+  cl_def_c_function(lispfy(name), (cl_objectfn_fixed)c_name, num_args);
+
 
 /* add spaces among several strings. */
 string __spc_expr(string first);
