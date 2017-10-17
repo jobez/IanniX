@@ -315,6 +315,7 @@ void IanniX::actionImportSVG(const QString &filename) {
         inspector->showSpaceTab();
     }
 }
+
 void IanniX::actionImportSVG(const QDomElement &xmlElement, qreal scale) {
     QDomNode xmlNode = xmlElement.firstChild();
     while(!xmlNode.isNull()) {
@@ -484,7 +485,10 @@ void IanniX::timerTrig(void *object, bool force) {
     NxCursor *cursor = (NxCursor*)object;
 
     //Messages
-    if((!Application::allowPlaySelected) || (!render->isSelection()) || ((Application::allowPlaySelected) && (cursor->getSelected())))
+    if((!Application::allowPlaySelected) ||
+       (!render->isSelection()) ||
+       ((Application::allowPlaySelected) &&
+        (cursor->getSelected())))
         cursor->trig(force);
 
     //Browse documents
@@ -496,20 +500,37 @@ void IanniX::timerTrig(void *object, bool force) {
         //Browse groups
         foreach(const NxGroup *group, document->groups) {
             //Browse active triggers
-            foreach(const NxObject *objectTrigger, group->objects[ObjectsActivityActive][ObjectsTypeTrigger]) {
-                NxTrigger *trigger = (NxTrigger*)objectTrigger;
+            foreach(const NxObject *objectTrigger,
+                    group->objects[ObjectsActivityActive][ObjectsTypeTrigger]) {
+
+              NxTrigger *trigger = (NxTrigger*)objectTrigger;
 
                 //Check the collision
-                if((cursor->contains(trigger)) && (((!isObjectSoloActive) && (trigger->isNotMuted())) || ((isObjectSoloActive) && (trigger->isSolo()))) && ((!Application::allowPlaySelected) || (!render->isSelection()) || ((Application::allowPlaySelected) && (trigger->getSelected()))))
+
+              if((cursor->contains(trigger)) &&
+                 (((!isObjectSoloActive) &&
+                   (trigger->isNotMuted())) ||
+                  ((isObjectSoloActive) &&
+                   (trigger->isSolo()))) &&
+                 ((!Application::allowPlaySelected) ||
+                  (!render->isSelection()) ||
+                  ((Application::allowPlaySelected) &&
+                   (trigger->getSelected()))))
+
                     trigger->trig(cursor);
             }
 
             //Browse active curbes
             if(cursor->getPerformCollision()) {
-                foreach(const NxObject *objectCurve, group->objects[ObjectsActivityActive][ObjectsTypeCurve]) {
+                foreach(const NxObject *objectCurve,
+                        group->objects[ObjectsActivityActive][ObjectsTypeCurve]) {
                     //Check the collision
-                    if((!Application::allowPlaySelected) || (!render->isSelection()) || ((Application::allowPlaySelected) && (objectCurve->getSelected())))
-                        cursor->trig((NxCurve*)objectCurve);
+                    if((!Application::allowPlaySelected) ||
+                       (!render->isSelection()) ||
+                       ((Application::allowPlaySelected) &&
+                        (objectCurve->getSelected())))
+
+                      cursor->trig((NxCurve*)objectCurve);
                 }
             }
         }
@@ -833,9 +854,36 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
 
     QStringList argv = command.split(" ", QString::SkipEmptyParts);
     quint16 argc = argv.count();
+    qDebug() << argv;
+    qDebug() << command;
     if(argc > 0) {
         QString commande = argv.at(0).toLower();
-        if((argc > 2) && (commande == COMMAND_ADD)) {
+        if(commande == COMMAND_TRIGGER_FREQ) {
+            QString key = argv.at(1);
+            bool isObject = false;
+            quint16 objectId; // = key.toUInt(&isObject);
+
+            foreach(NxObject *object, *render->getSelection()) {
+              objectId = object->getId();
+            }
+
+            NxObject *object = document->getObject(objectId);
+            qDebug() << key;
+            object->dispatchProperty(qPrintable(commande), argvDouble(argv, 2));
+            // if(isObject) {
+
+            //   if(object) {
+            //     if(argc > 2) {
+
+            //       if(currentDocument == workingDocument)
+            //         actionCC(object, 3);
+            //     }
+            //     else if(needOutput)
+            //       return object->getProperty(qPrintable(commande)).toInt();
+            //   }
+            // }
+
+          } else if((argc > 2) && (commande == COMMAND_ADD)) {
             bool ok = false;
             qint16 id = argv.at(2).toUInt(&ok);
             NxObject *parentObject = 0;
@@ -883,7 +931,7 @@ const QVariant IanniX::execute(const QString &command, ExecuteSource source, boo
         else {
             // ---- GLOBAL COMMANDS ----
             //String parameter
-            if((commande == COMMAND_ROTATE) || (commande == COMMAND_CENTER)) {
+           if((commande == COMMAND_ROTATE) || (commande == COMMAND_CENTER)) {
                 if(workingDocument == currentDocument) {
                     if((argc == 4) || (argc == 7)) transport->dispatchProperty(qPrintable(commande), argvFullString(command, argv, 1));
                     else if((argc > 4) && (commande == COMMAND_ROTATE)) {

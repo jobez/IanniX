@@ -230,7 +230,7 @@ QDockWidget::title {
 QToolBar {
 	background:				qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(247, 247, 247, 255), stop:1 rgba(222, 222, 222, 255));
 	border: 					1px solid rgba(202, 202, 202, 255);
-	spacing:					0px; 
+	spacing:					0px;
 }
 QToolButton {
 	border: 					0px solid black;
@@ -1295,6 +1295,68 @@ if INACTIVE</string>
               <property name="bottomMargin">
                <number>10</number>
               </property>
+              <item>
+                 <widget class="QLabel" name="positionLabel">
+                  <property name="minimumSize">
+                   <size>
+                    <width>85</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>85</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                    <string>frequency</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                  <property name="buddy">
+                   <cstring>freq</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="freq">
+                  <property name="minimumSize">
+                   <size>
+                    <width>70</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>70</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>note</string>
+                  </property>
+                  <property name="suffix">
+                   <string notr="true"> s</string>
+                  </property>
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="minimum">
+                   <double>-999999.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>999999.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
+                  </property>
+                 </widget>
+                </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_5">
                 <property name="spacing">
@@ -5358,6 +5420,22 @@ padding: 0px;</string>
   </connection>
   <connection>
    <sender>positionX</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>UiInspector</receiver>
+   <slot>actionInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>186</x>
+     <y>121</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>178</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>freq</sender>
    <signal>valueChanged(double)</signal>
    <receiver>UiInspector</receiver>
    <slot>actionInfo()</slot>

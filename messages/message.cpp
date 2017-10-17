@@ -127,6 +127,9 @@ bool Message::parse(const QVector<QByteArray> & patternItems, const MessageManag
                         messageScriptValue.setProperty("trigger_value_x", ((NxCursor*)destination.cursor)->getCursorValue(((NxTrigger*)destination.trigger)->getPos()).x());
                     if((patternArgument.contains("trigger_value_y")) && (((NxCursor*)destination.cursor)))
                         messageScriptValue.setProperty("trigger_value_y", ((NxCursor*)destination.cursor)->getCursorValue(((NxTrigger*)destination.trigger)->getPos()).y());
+                    if(patternArgument.contains("trigger_freq") && (((NxCursor*)destination.cursor))) {
+                      qDebug() << (((NxTrigger*)destination.trigger)->getFreq());
+                      messageScriptValue.setProperty("trigger_freq", (((NxTrigger*)destination.trigger)->getFreq())); }
                     if((patternArgument.contains("trigger_value_z")) && (((NxCursor*)destination.cursor)))
                         messageScriptValue.setProperty("trigger_value_z", ((NxCursor*)destination.cursor)->getCursorValue(((NxTrigger*)destination.trigger)->getPos()).z());
                     if(patternArgument.contains("trigger_value"))
@@ -341,6 +344,9 @@ bool Message::parse(const QVector<QByteArray> & patternItems, const MessageManag
                         found = addFloat(((NxTrigger*)destination.trigger)->getPos().y(), patternArgument, patternIndex);
                     else if(patternArgument == "trigger_zPos")
                         found = addFloat(((NxTrigger*)destination.trigger)->getPos().z(), patternArgument, patternIndex);
+                    else if(patternArgument.contains("trigger_freq") && (((NxCursor*)destination.cursor))) {
+                      qDebug() << (((NxTrigger*)destination.trigger)->getFreq());
+                      found = addFloat((((NxTrigger*)destination.trigger)->getFreq()), patternArgument, patternIndex); }
                     else if((patternArgument == "trigger_value_x") && (((NxCursor*)destination.cursor)))
                         found = addFloat(((NxCursor*)destination.cursor)->getCursorValue(((NxTrigger*)destination.trigger)->getPos()).x(), patternArgument, patternIndex);
                     else if((patternArgument == "trigger_value_y") && (((NxCursor*)destination.cursor)))

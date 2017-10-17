@@ -222,6 +222,7 @@ void IanniXApp::setHelp() {
 
     Help::categories["values"].category = tr("Messages values");
     Help::categories["values"].infos << HelpInfo(QString("trigger_id"),            tr("ID of the triggered trigger"));
+    Help::categories["values"].infos << HelpInfo(QString("trigger_freq"),            tr("freq"));
     Help::categories["values"].infos << HelpInfo(QString("trigger_group_id"),	   tr("Group name of the triggered trigger"));
     Help::categories["values"].infos << HelpInfo(QString("trigger_label"),         tr("Label of the triggered trigger"));
     Help::categories["values"].infos << HelpInfo(QString("trigger_xPos"),          tr("x coordinate of the triggered trigger"));

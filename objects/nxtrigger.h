@@ -35,7 +35,7 @@ class NxTrigger : public NxObject {
     Q_PROPERTY(QString settextureinactive READ getTextureInactive WRITE setTextureInactive)
     Q_PROPERTY(qreal   settriggeroff      READ getTriggerOff      WRITE setTriggerOff)
     Q_PROPERTY(bool    trig               READ getForceTrig       WRITE setForceTrig)
-
+    Q_PROPERTY(qreal   settrigfreq            READ getFreq            WRITE setFreq)
 public:
     explicit NxTrigger(ApplicationCurrent *parent, QTreeWidgetItem *ccParentItem);
     void initializeCustom();
@@ -45,6 +45,7 @@ private:
     QString textureActive, textureInactive;
     QColor colorTrigged;
     qreal triggerOff;
+    qreal freq;
     static GLuint glListTrigger;
 public:
     NxObject *cursorTrigged;
@@ -79,6 +80,15 @@ public:
     }
     inline void setTriggerOff(qreal _triggerOff) {
         triggerOff = _triggerOff;
+    }
+
+    inline void setFreq(qreal _freq) {
+      qDebug() << _freq;
+      freq = _freq;
+    }
+
+    inline qreal getFreq() const {
+      return freq;
     }
 
 public:

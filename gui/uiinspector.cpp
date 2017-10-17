@@ -301,6 +301,8 @@ void UiInspector::actionInfo() {
         Application::current->pushSnapshot();
 
         if(ui->positionX == sender())                       Application::current->execute(QString("%1 selection %2").arg(COMMAND_POS_X).arg(ui->positionX->value()), ExecuteSourceGui);
+        else if (ui->freq == sender())
+          Application::current->execute(QString("%1 selection %2").arg(COMMAND_TRIGGER_FREQ).arg(ui->freq->value()), ExecuteSourceGui);
         else if(ui->positionY == sender())                  Application::current->execute(QString("%1 selection %2").arg(COMMAND_POS_Y).arg(ui->positionY->value()), ExecuteSourceGui);
         else if(ui->positionZ == sender())                  Application::current->execute(QString("%1 selection %2").arg(COMMAND_POS_Z).arg(ui->positionZ->value()), ExecuteSourceGui);
         else if(ui->activityCheck == sender())              Application::current->execute(QString("%1 selection %2").arg(COMMAND_ACTIVE).arg(ui->activityCheck->isChecked()), ExecuteSourceGui);
@@ -653,7 +655,6 @@ void UiInspector::refresh() {
                 NxTrigger *trigger = (NxTrigger*)object;
                 if(prevTrigger == 0)
                     prevTrigger = trigger;
-
                 change(indexObject, ui->triggerOffSpin, trigger->getTriggerOff(), prevTrigger->getTriggerOff());
                 change(indexObject, ui->textureCombo1, trigger->getTextureActive(), prevTrigger->getTextureActive(), false);
                 change(indexObject, ui->textureCombo2, trigger->getTextureInactive(), prevTrigger->getTextureInactive(), false);

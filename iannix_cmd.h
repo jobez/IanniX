@@ -133,4 +133,6 @@
 #define COMMAND_VIEWPORT                    "viewport"
 #define COMMAND_SNAPSHOT                    "snapshot"
 
+#define COMMAND_TRIGGER_FREQ                "settrigfreq"
+
 #endif // IANNIX_CMD_H
