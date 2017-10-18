@@ -20,6 +20,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include "ecl/cl_bridge_utils.hpp"
 #include "iannix.h"
 
@@ -27,14 +28,13 @@
  * This time we load the fasb file after
  * the Lisp Environment is booted.
  * */
-#define __cl_init_name  init_lib_MY_APP__ALL_SYSTEMS
+#define __cl_init_name  init_lib_STOCHOS_EMBED__ALL_SYSTEMS
 
 extern "C"{
 
   extern void __cl_init_name(cl_object);
 
 }
-
 
 cl_object iannix_run(cl_obj cmd_string){
   QString cmd = QString::fromStdString(cmd_string.to_std_string());
@@ -49,26 +49,15 @@ cl_object iannix_run(cl_obj cmd_string){
   return ecl_make_constant_base_string(result.c_str(), strlen(result.c_str()));
 }
 
-
 void init_cl_env(){
-  char* argv;
-  char** pargv;
-  argv = "app";
-  pargv = &argv;
+  /* Initialize EQL environment */
+  EQL eql;
+  /* TODO: make the repl optional from startup or have a ui trigger */
+  eql.eval("(load  \"lisp/dev.lisp\")");
+  eql.exec(__cl_init_name);
 
-
-  /* Initialize CL environment */
-  cl_boot(1, pargv);
-  cl_eval("load",  "\"lisp/my.lisp\"");
-  // /* load fasb */
-  // cl_eval("load", CL_MAIN_FASB);
-  // /* set context to current package */
-  // cl_eval("in-package", CL_MAIN_PACKAGE_NAME);
-  /* hook for shutting down cl env */
-  atexit(cl_shutdown);
   DEFUN("iannix-run", iannix_run, 1);
 }
-
 IanniX::IanniX(const QString &_projectToLoad, QObject *parent) :
     ApplicationCurrent(parent) {
     projectToLoad = _projectToLoad;

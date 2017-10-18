@@ -6,6 +6,8 @@
 #undef slots
 #endif
 #include <ecl/ecl.h>
+#include <eql5/eql.h>
+
 
 using std::string;
 using lisp_expr = std::string;
